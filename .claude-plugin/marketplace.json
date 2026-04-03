@@ -1,0 +1,26 @@
+{
+  "name": "init-project",
+  "version": "1.0.0",
+  "description": "Documentation-driven project initialization — generates CLAUDE.md, DESIGN.md, requirements, architecture, API spec, progress, and decision logs through natural dialogue",
+  "author": "sajiner90",
+  "license": "MIT",
+  "homepage": "https://github.com/sajiner90/init-project",
+  "skills": [
+    {
+      "name": "init-project",
+      "file": "SKILL.md",
+      "description": "Initialize or update a complete documentation system for any project"
+    }
+  ],
+  "keywords": [
+    "documentation",
+    "project-init",
+    "scaffolding",
+    "spec-driven",
+    "architecture",
+    "design-system",
+    "requirements",
+    "decisions"
+  ],
+  "platforms": ["claude-code", "cursor", "codex"]
+}

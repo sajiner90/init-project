@@ -1,6 +1,16 @@
 ---
 name: init-project
 description: "Documentation-driven project initialization. Generates a complete spec system (CLAUDE.md, design system, requirements, architecture, API spec, progress, decisions) through natural dialogue. Works for new and existing projects. Supports three modes: init, update, audit."
+triggers:
+  - "initialize project"
+  - "set up documentation"
+  - "create CLAUDE.md"
+  - "init docs"
+  - "项目初始化"
+  - "生成文档体系"
+auto_suggest:
+  condition: "No CLAUDE.md found in project root"
+  message: "This project has no CLAUDE.md. Run /init-project to generate a complete documentation system."
 ---
 
 # Spec-Driven Init — 规范文档驱动的项目初始化
@@ -478,6 +488,32 @@ lint:         ## Type check / lint
 确认没问题后我帮你 commit。
 ```
 
+### 质量评分
+
+一致性校验后，给出文档质量总评：
+
+```
+文档质量评分: XX/100
+
+| 维度 | 得分 | 说明 |
+|------|------|------|
+| 交叉引用一致 | /20 | M-编号和 D-编号在所有文档中是否一致 |
+| 验收标准可测试 | /20 | AC 是否具体、可验证，而非模糊描述 |
+| 架构图信息量 | /20 | 是否有 ASCII 图、是否覆盖数据流 |
+| 决策记录完整 | /20 | 每条决策是否包含被拒方案和理由 |
+| 设计 token 具体 | /20 | 色值/字号/间距是否给出具体数值 |
+```
+
+**评分规则：**
+- 20/20：完全满足
+- 15-19：基本满足，有小缺陷
+- 10-14：有明显缺失
+- <10：需要重点补充
+
+对于不适用的维度（如纯后端项目无 DESIGN.md），该维度得分归入其他维度平均分配。
+
+如果总分 < 70，主动提示用户哪些维度需要补充信息。
+
 ---
 
 ## Update Mode — 增量更新
@@ -547,3 +583,48 @@ lint:         ## Type check / lint
 6. **编号即契约** — D001、M-001 等编号一旦分配不可变更，只可追加
 7. **交叉引用即验证** — 文档间的引用关系是一致性的天然校验手段
 8. **模板是起点不是终点** — templates/ 提供结构参考，实际内容必须基于项目定制
+
+---
+
+## 多语言模板
+
+模板目录结构：
+```
+templates/
+├── *.md            ← 中文模板（默认）
+└── en/
+    └── *.md        ← English templates
+```
+
+根据 Phase 1 的语言检测结果选择对应模板。如果项目以英文为主，读取 `templates/en/` 目录。
+
+---
+
+## 工作流集成
+
+init-project 在更大的开发循环中的位置：
+
+```
+/init-project → /brainstorm → /plan → 开发 → /init-project update
+      ↑                                              ↓
+      └──────── /init-project audit ◄─────────────────┘
+```
+
+**与其他 skill 的关系：**
+- **在 brainstorming 之前运行** — 为创意探索提供项目上下文
+- **在 plan 之前运行** — 为实施规划提供需求和架构基础
+- **在代码变更后运行 update** — 保持文档与代码同步
+- **在发版前运行 audit** — 确保文档一致性
+
+---
+
+## 自动触发建议
+
+当检测到以下条件时，Agent 应主动建议用户运行此 skill：
+
+| 条件 | 建议 |
+|------|------|
+| 项目无 CLAUDE.md | "建议运行 /init-project 生成文档体系" |
+| CLAUDE.md 存在但无 docs/ 目录 | "建议运行 /init-project 补全规范文档" |
+| 最近 10 次 commit 但 progress.md 未更新 | "建议运行 /init-project update 同步进度" |
+| 用户问"项目结构是什么" | "可以运行 /init-project 生成完整的架构文档" |

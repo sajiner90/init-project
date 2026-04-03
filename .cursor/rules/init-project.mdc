@@ -1,0 +1,41 @@
+---
+description: "Documentation-driven project initialization. Generates CLAUDE.md, DESIGN.md, requirements, architecture, API spec, progress, and decision logs through dialogue."
+globs:
+alwaysApply: false
+---
+
+# Spec-Driven Init — for Cursor
+
+When the user asks to initialize project documentation, set up a spec system, or create a CLAUDE.md / requirements / architecture document:
+
+1. Read the full skill specification at `SKILL.md` in this skill directory
+2. Follow the five-phase process: Detect → Explore → Confirm → Generate → Validate
+3. Use templates from `templates/` as structural references
+
+## Quick Reference
+
+### Three Modes
+- **init**: Full documentation system generation (default)
+- **update**: Sync docs after code changes
+- **audit**: Check cross-document consistency
+
+### Generated Documents
+| File | Purpose | Condition |
+|------|---------|-----------|
+| `CLAUDE.md` | Agent onboarding | Always |
+| `DESIGN.md` | Visual design system | Projects with UI |
+| `docs/requirements.md` | Functional requirements | Always |
+| `docs/architecture.md` | Architecture & modules | Always |
+| `docs/api-spec.md` | API specification | Backend/fullstack |
+| `progress.md` | Progress tracking | Always |
+| `docs/decisions.md` | Decision log | Always |
+
+### Hard Gate
+Do NOT generate any documents until exploration phase completes and user confirms understanding.
+
+### Cross-Reference Numbering
+- Modules: M-001, M-002, ...
+- Decisions: D001, D002, ...
+- Numbers must be consistent across all documents
+
+For full instructions, refer to SKILL.md.
